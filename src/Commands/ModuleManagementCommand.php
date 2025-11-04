@@ -2,7 +2,6 @@
 
 namespace faysal0x1\modulas\Commands;
 
-use faysal0x1\modulas\Models\ModuleSettings;
 use faysal0x1\modulas\ModuleManager;
 use faysal0x1\modulas\Services\DatabaseModuleManager;
 use Illuminate\Console\Command;
