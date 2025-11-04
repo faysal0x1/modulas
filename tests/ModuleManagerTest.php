@@ -1,8 +1,8 @@
 <?php
 
-use faysal0x1\Modulas\ModuleManager;
-use faysal0x1\Modulas\Models\ModuleSettings;
-use faysal0x1\Modulas\Services\DatabaseModuleManager;
+use faysal0x1\modulas\ModuleManager;
+use faysal0x1\modulas\Models\ModuleSettings;
+use faysal0x1\modulas\Services\DatabaseModuleManager;
 
 beforeEach(function () {
     // Clear any existing modules

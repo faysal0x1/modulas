@@ -1,8 +1,8 @@
 <?php
 
-namespace faysal0x1\Modulas;
+namespace faysal0x1\modulas;
 
-use faysal0x1\Modulas\Services\DatabaseModuleManager;
+use faysal0x1\modulas\Services\DatabaseModuleManager;
 use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 use RuntimeException;

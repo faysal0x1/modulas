@@ -1,6 +1,6 @@
 <?php
 
-namespace faysal0x1\Modulas\Facades;
+namespace faysal0x1\modulas\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

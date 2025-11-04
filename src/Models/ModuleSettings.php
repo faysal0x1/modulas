@@ -1,6 +1,6 @@
 <?php
 
-namespace faysal0x1\Modulas\Models;
+namespace faysal0x1\modulas\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;

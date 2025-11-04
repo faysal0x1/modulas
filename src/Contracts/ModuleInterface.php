@@ -1,6 +1,6 @@
 <?php
 
-namespace faysal0x1\Modulas\Contracts;
+namespace faysal0x1\modulas\Contracts;
 
 interface ModuleInterface
 {

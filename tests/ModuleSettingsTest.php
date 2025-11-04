@@ -1,6 +1,6 @@
 <?php
 
-use faysal0x1\Modulas\Models\ModuleSettings;
+use faysal0x1\modulas\Models\ModuleSettings;
 use Illuminate\Support\Facades\Cache;
 
 beforeEach(function () {

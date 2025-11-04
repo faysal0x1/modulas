@@ -1,8 +1,8 @@
 <?php
 
-namespace faysal0x1\Modulas\Services;
+namespace faysal0x1\modulas\Services;
 
-use faysal0x1\Modulas\Models\ModuleSettings;
+use faysal0x1\modulas\Models\ModuleSettings;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;

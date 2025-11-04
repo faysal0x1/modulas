@@ -115,7 +115,7 @@ return [
 #### Using the Facade
 
 ```php
-use faysal0x1\Modulas\Facades\ModuleManager;
+use faysal0x1\modulas\Facades\ModuleManager;
 
 // Get all available modules
 $modules = ModuleManager::getAvailableModules();
@@ -138,7 +138,7 @@ $stats = ModuleManager::getStatistics();
 #### Using the Class Directly
 
 ```php
-use faysal0x1\Modulas\ModuleManager;
+use faysal0x1\modulas\ModuleManager;
 
 // Register all modules
 ModuleManager::registerAll();
@@ -158,7 +158,7 @@ ModuleManager::boot('example_module');
 #### Enable/Disable Modules (Database Mode)
 
 ```php
-use faysal0x1\Modulas\Facades\ModuleManager;
+use faysal0x1\modulas\Facades\ModuleManager;
 
 // Enable a module
 ModuleManager::enableModule('example_module');
@@ -175,7 +175,7 @@ ModuleManager::updateModuleSettings('example_module', [
 #### Install/Uninstall Modules (Database Mode)
 
 ```php
-use faysal0x1\Modulas\Services\DatabaseModuleManager;
+use faysal0x1\modulas\Services\DatabaseModuleManager;
 
 // Install a module
 DatabaseModuleManager::installModule([
@@ -202,7 +202,7 @@ DatabaseModuleManager::uninstallModule('new_module');
 #### Discover Module Seeders
 
 ```php
-use faysal0x1\Modulas\Facades\ModuleManager;
+use faysal0x1\modulas\Facades\ModuleManager;
 
 // Discover all module seeders
 $seeders = ModuleManager::discoverModuleSeeders();
@@ -216,7 +216,7 @@ foreach ($seeders as $seeder) {
 ### Dependency Management
 
 ```php
-use faysal0x1\Modulas\Facades\ModuleManager;
+use faysal0x1\modulas\Facades\ModuleManager;
 
 // Get module dependencies
 $dependencies = ModuleManager::getModuleDependencies('example_module');
@@ -227,7 +227,7 @@ $dependencies = ModuleManager::getModuleDependencies('example_module');
 ### Cache Management
 
 ```php
-use faysal0x1\Modulas\Facades\ModuleManager;
+use faysal0x1\modulas\Facades\ModuleManager;
 
 // Clear all module caches
 ModuleManager::clearAllCache();
@@ -367,7 +367,7 @@ Add to `config/modules.php`:
 ### Config File Mode
 
 ```php
-use faysal0x1\Modulas\ModuleManager;
+use faysal0x1\modulas\ModuleManager;
 
 // Use config file mode
 ModuleManager::useDatabase(false);
@@ -379,7 +379,7 @@ ModuleManager::registerAll();
 ### Database Mode
 
 ```php
-use faysal0x1\Modulas\ModuleManager;
+use faysal0x1\modulas\ModuleManager;
 
 // Use database mode (default)
 ModuleManager::useDatabase(true);
@@ -397,7 +397,7 @@ You can implement the `ModuleInterface` for better type safety:
 
 namespace App\Modules\ExampleModule;
 
-use faysal0x1\Modulas\Contracts\ModuleInterface;
+use faysal0x1\modulas\Contracts\ModuleInterface;
 
 class ExampleModule implements ModuleInterface
 {

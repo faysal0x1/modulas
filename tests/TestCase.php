@@ -1,10 +1,10 @@
 <?php
 
-namespace faysal0x1\Modulas\Tests;
+namespace faysal0x1\modulas\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use faysal0x1\Modulas\ModulesServiceProvider;
+use faysal0x1\modulas\ModulesServiceProvider;
 
 class TestCase extends Orchestra
 {

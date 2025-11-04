@@ -1,10 +1,10 @@
 <?php
 
-namespace faysal0x1\Modulas;
+namespace faysal0x1\modulas;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
-use faysal0x1\Modulas\Commands\ModuleManagementCommand;
+use faysal0x1\modulas\Commands\ModuleManagementCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
