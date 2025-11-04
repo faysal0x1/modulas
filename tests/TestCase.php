@@ -2,9 +2,9 @@
 
 namespace faysal0x1\Modulas\Tests;
 
+use faysal0x1\Modulas\ModulesServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use faysal0x1\Modulas\ModulesServiceProvider;
 
 class TestCase extends Orchestra
 {

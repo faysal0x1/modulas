@@ -1,7 +1,6 @@
 <?php
 
 use faysal0x1\Modulas\Models\ModuleSettings;
-use faysal0x1\Modulas\Services\DatabaseModuleManager;
 
 beforeEach(function () {
     ModuleSettings::truncate();

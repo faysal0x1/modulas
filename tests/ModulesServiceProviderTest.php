@@ -1,7 +1,6 @@
 <?php
 
 use faysal0x1\Modulas\ModulesServiceProvider;
-use faysal0x1\Modulas\Models\ModuleSettings;
 
 it('can register the service provider', function () {
     $provider = new ModulesServiceProvider($this->app);

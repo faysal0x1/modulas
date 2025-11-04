@@ -3,7 +3,6 @@
 namespace faysal0x1\Modulas\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Cache;
 
 class ModuleSettings extends Model
@@ -72,7 +71,7 @@ class ModuleSettings extends Model
                             'version' => $module->version,
                             'author' => $module->author,
                             'is_core' => $module->is_core,
-                        ]
+                        ],
                     ];
                 })
                 ->toArray();
@@ -88,7 +87,7 @@ class ModuleSettings extends Model
             return self::where('module_key', $moduleKey)->first();
         });
 
-        if (!$module) {
+        if (! $module) {
             return null;
         }
 
@@ -245,7 +244,7 @@ class ModuleSettings extends Model
      */
     public function canBeDisabled(): bool
     {
-        return !$this->is_core;
+        return ! $this->is_core;
     }
 
     /**
@@ -262,7 +261,7 @@ class ModuleSettings extends Model
                 ->where('is_enabled', true)
                 ->first();
 
-            if (!$depModule) {
+            if (! $depModule) {
                 return true;
             }
         }
@@ -286,7 +285,7 @@ class ModuleSettings extends Model
                 ->where('is_enabled', true)
                 ->first();
 
-            if (!$depModule) {
+            if (! $depModule) {
                 $unmet[] = $dependency;
             }
         }

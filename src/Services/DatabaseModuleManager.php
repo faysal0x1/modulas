@@ -4,7 +4,6 @@ namespace faysal0x1\Modulas\Services;
 
 use faysal0x1\Modulas\Models\ModuleSettings;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;
 use RuntimeException;
 use Throwable;
@@ -12,6 +11,7 @@ use Throwable;
 class DatabaseModuleManager
 {
     private static array $loadedModules = [];
+
     private static bool $initialized = false;
 
     /**
@@ -49,7 +49,7 @@ class DatabaseModuleManager
                     Log::warning("Provider not found or undefined for module: {$moduleName}");
                 }
             } catch (Throwable $e) {
-                Log::error("Failed to register module {$moduleName}: " . $e->getMessage());
+                Log::error("Failed to register module {$moduleName}: ".$e->getMessage());
             }
         }
     }
@@ -65,7 +65,7 @@ class DatabaseModuleManager
                     app($provider)->boot();
                 }
             } catch (Throwable $e) {
-                Log::error("Failed to boot module {$moduleName}: " . $e->getMessage());
+                Log::error("Failed to boot module {$moduleName}: ".$e->getMessage());
             }
         }
     }
@@ -79,16 +79,16 @@ class DatabaseModuleManager
 
         $module = ModuleSettings::getModuleConfig($moduleName);
 
-        if (!$module) {
+        if (! $module) {
             throw new RuntimeException("Module '{$moduleName}' not found in database");
         }
 
-        if (!$module['enabled']) {
+        if (! $module['enabled']) {
             throw new RuntimeException("Module '{$moduleName}' is disabled");
         }
 
         $provider = $module['provider'] ?? null;
-        if (!$provider || !class_exists($provider)) {
+        if (! $provider || ! class_exists($provider)) {
             throw new RuntimeException("Provider not found or invalid for module '{$moduleName}'");
         }
 
@@ -101,7 +101,7 @@ class DatabaseModuleManager
      */
     public static function boot(string $moduleName): void
     {
-        if (!isset(self::$loadedModules[$moduleName])) {
+        if (! isset(self::$loadedModules[$moduleName])) {
             throw new InvalidArgumentException("Module '{$moduleName}' not loaded");
         }
 
@@ -121,7 +121,7 @@ class DatabaseModuleManager
 
         $module = ModuleSettings::where('module_key', $moduleKey)->first();
 
-        if (!$module) {
+        if (! $module) {
             throw new InvalidArgumentException("Module '{$moduleKey}' not found");
         }
 
@@ -132,7 +132,7 @@ class DatabaseModuleManager
         // Check dependencies
         if ($module->hasUnmetDependencies()) {
             $unmet = $module->getUnmetDependencies();
-            throw new RuntimeException("Module '{$moduleKey}' has unmet dependencies: " . implode(', ', $unmet));
+            throw new RuntimeException("Module '{$moduleKey}' has unmet dependencies: ".implode(', ', $unmet));
         }
 
         $result = $module->enable();
@@ -152,7 +152,7 @@ class DatabaseModuleManager
 
         $module = ModuleSettings::where('module_key', $moduleKey)->first();
 
-        if (!$module) {
+        if (! $module) {
             throw new InvalidArgumentException("Module '{$moduleKey}' not found");
         }
 
@@ -166,12 +166,11 @@ class DatabaseModuleManager
             ->pluck('module_key')
             ->toArray();
 
-        if (!empty($dependents)) {
-            throw new RuntimeException("Cannot disable module '{$moduleKey}' because other modules depend on it: " . implode(', ', $dependents));
+        if (! empty($dependents)) {
+            throw new RuntimeException("Cannot disable module '{$moduleKey}' because other modules depend on it: ".implode(', ', $dependents));
         }
 
         $result = $module->disable();
-
 
         return $result;
     }
@@ -185,12 +184,11 @@ class DatabaseModuleManager
 
         $module = ModuleSettings::where('module_key', $moduleKey)->first();
 
-        if (!$module) {
+        if (! $module) {
             throw new InvalidArgumentException("Module '{$moduleKey}' not found");
         }
 
         $result = $module->updateSettings($settings);
-
 
         return $result;
     }
@@ -231,6 +229,7 @@ class DatabaseModuleManager
     public static function isModuleEnabled(string $moduleKey): bool
     {
         $config = self::getModuleConfig($moduleKey);
+
         return $config ? $config['enabled'] : false;
     }
 
@@ -265,7 +264,7 @@ class DatabaseModuleManager
             $module['has_unmet_dependencies'] = false;
             $module['unmet_dependencies'] = [];
 
-            if (!$module['is_core']) {
+            if (! $module['is_core']) {
                 $moduleObj = ModuleSettings::where('module_key', $module['module_key'])->first();
                 if ($moduleObj) {
                     $module['has_unmet_dependencies'] = $moduleObj->hasUnmetDependencies();
@@ -285,7 +284,7 @@ class DatabaseModuleManager
         try {
             ModuleSettings::syncFromConfig();
         } catch (Throwable $e) {
-            Log::error("Failed to sync modules from config: " . $e->getMessage());
+            Log::error('Failed to sync modules from config: '.$e->getMessage());
         }
     }
 
@@ -303,6 +302,7 @@ class DatabaseModuleManager
     public static function getModuleDependencies(string $moduleKey): array
     {
         $config = self::getModuleConfig($moduleKey);
+
         return $config ? ($config['dependencies'] ?? []) : [];
     }
 
@@ -342,7 +342,8 @@ class DatabaseModuleManager
 
             return true;
         } catch (Throwable $e) {
-            Log::error("Failed to install module: " . $e->getMessage());
+            Log::error('Failed to install module: '.$e->getMessage());
+
             return false;
         }
     }
@@ -356,7 +357,7 @@ class DatabaseModuleManager
 
         $module = ModuleSettings::where('module_key', $moduleKey)->first();
 
-        if (!$module) {
+        if (! $module) {
             throw new InvalidArgumentException("Module '{$moduleKey}' not found");
         }
 
@@ -366,15 +367,17 @@ class DatabaseModuleManager
 
         // Check if other modules depend on this one
         $dependents = self::getDependentModules($moduleKey);
-        if (!empty($dependents)) {
-            throw new RuntimeException("Cannot uninstall module '{$moduleKey}' because other modules depend on it: " . implode(', ', $dependents));
+        if (! empty($dependents)) {
+            throw new RuntimeException("Cannot uninstall module '{$moduleKey}' because other modules depend on it: ".implode(', ', $dependents));
         }
 
         try {
             $module->delete();
+
             return true;
         } catch (Throwable $e) {
-            Log::error("Failed to uninstall module: " . $e->getMessage());
+            Log::error('Failed to uninstall module: '.$e->getMessage());
+
             return false;
         }
     }

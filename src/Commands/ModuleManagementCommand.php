@@ -2,7 +2,6 @@
 
 namespace faysal0x1\Modulas\Commands;
 
-use faysal0x1\Modulas\Models\ModuleSettings;
 use faysal0x1\Modulas\ModuleManager;
 use faysal0x1\Modulas\Services\DatabaseModuleManager;
 use Illuminate\Console\Command;
@@ -56,10 +55,12 @@ class ModuleManagementCommand extends Command
                     return $this->uninstallModule($module);
                 default:
                     $this->error("Unknown action: {$action}");
+
                     return 1;
             }
         } catch (\Exception $e) {
-            $this->error("Error: " . $e->getMessage());
+            $this->error('Error: '.$e->getMessage());
+
             return 1;
         }
     }
@@ -73,6 +74,7 @@ class ModuleManagementCommand extends Command
 
         if (empty($modules)) {
             $this->info('No modules found.');
+
             return 0;
         }
 
@@ -95,7 +97,7 @@ class ModuleManagementCommand extends Command
 
         $stats = ModuleManager::getStatistics();
         $this->newLine();
-        $this->info("Statistics:");
+        $this->info('Statistics:');
         $this->line("Total: {$stats['total']}");
         $this->line("Enabled: {$stats['enabled']}");
         $this->line("Disabled: {$stats['disabled']}");
@@ -111,8 +113,9 @@ class ModuleManagementCommand extends Command
      */
     private function enableModule(?string $module): int
     {
-        if (!$module) {
+        if (! $module) {
             $this->error('Module key is required for enable action.');
+
             return 1;
         }
 
@@ -121,13 +124,16 @@ class ModuleManagementCommand extends Command
 
             if ($result) {
                 $this->info("Module '{$module}' enabled successfully.");
+
                 return 0;
             } else {
                 $this->error("Failed to enable module '{$module}'.");
+
                 return 1;
             }
         } catch (\Exception $e) {
-            $this->error("Error enabling module '{$module}': " . $e->getMessage());
+            $this->error("Error enabling module '{$module}': ".$e->getMessage());
+
             return 1;
         }
     }
@@ -137,8 +143,9 @@ class ModuleManagementCommand extends Command
      */
     private function disableModule(?string $module): int
     {
-        if (!$module) {
+        if (! $module) {
             $this->error('Module key is required for disable action.');
+
             return 1;
         }
 
@@ -147,13 +154,16 @@ class ModuleManagementCommand extends Command
 
             if ($result) {
                 $this->info("Module '{$module}' disabled successfully.");
+
                 return 0;
             } else {
                 $this->error("Failed to disable module '{$module}'.");
+
                 return 1;
             }
         } catch (\Exception $e) {
-            $this->error("Error disabling module '{$module}': " . $e->getMessage());
+            $this->error("Error disabling module '{$module}': ".$e->getMessage());
+
             return 1;
         }
     }
@@ -167,19 +177,19 @@ class ModuleManagementCommand extends Command
 
         foreach ($modules as $module) {
             $this->line("Module: {$module['module_key']}");
-            $this->line("  Name: " . ($module['module_name'] ?? 'N/A'));
-            $this->line("  Enabled: " . ($module['enabled'] ? 'Yes' : 'No'));
-            $this->line("  Loaded: " . ($module['loaded'] ? 'Yes' : 'No'));
-            $this->line("  Provider: " . ($module['provider'] ?? 'N/A'));
-            $this->line("  Version: " . ($module['version'] ?? 'N/A'));
-            $this->line("  Core: " . ($module['is_core'] ? 'Yes' : 'No'));
+            $this->line('  Name: '.($module['module_name'] ?? 'N/A'));
+            $this->line('  Enabled: '.($module['enabled'] ? 'Yes' : 'No'));
+            $this->line('  Loaded: '.($module['loaded'] ? 'Yes' : 'No'));
+            $this->line('  Provider: '.($module['provider'] ?? 'N/A'));
+            $this->line('  Version: '.($module['version'] ?? 'N/A'));
+            $this->line('  Core: '.($module['is_core'] ? 'Yes' : 'No'));
 
-            if (!empty($module['dependencies'])) {
-                $this->line("  Dependencies: " . implode(', ', $module['dependencies']));
+            if (! empty($module['dependencies'])) {
+                $this->line('  Dependencies: '.implode(', ', $module['dependencies']));
             }
 
             if ($module['has_unmet_dependencies']) {
-                $this->line("  Unmet Dependencies: " . implode(', ', $module['unmet_dependencies']));
+                $this->line('  Unmet Dependencies: '.implode(', ', $module['unmet_dependencies']));
             }
 
             $this->newLine();
@@ -196,9 +206,11 @@ class ModuleManagementCommand extends Command
         try {
             DatabaseModuleManager::syncModulesFromConfig();
             $this->info('Modules synced from config successfully.');
+
             return 0;
         } catch (\Exception $e) {
-            $this->error("Error syncing modules: " . $e->getMessage());
+            $this->error('Error syncing modules: '.$e->getMessage());
+
             return 1;
         }
     }
@@ -211,9 +223,11 @@ class ModuleManagementCommand extends Command
         try {
             ModuleManager::clearAllCache();
             $this->info('Module caches cleared successfully.');
+
             return 0;
         } catch (\Exception $e) {
-            $this->error("Error clearing caches: " . $e->getMessage());
+            $this->error('Error clearing caches: '.$e->getMessage());
+
             return 1;
         }
     }
@@ -223,8 +237,9 @@ class ModuleManagementCommand extends Command
      */
     private function installModule(?string $module): int
     {
-        if (!$module) {
+        if (! $module) {
             $this->error('Module key is required for install action.');
+
             return 1;
         }
 
@@ -240,6 +255,7 @@ class ModuleManagementCommand extends Command
             $settings = json_decode($this->option('settings'), true);
             if (json_last_error() !== JSON_ERROR_NONE) {
                 $this->error('Invalid JSON in settings option.');
+
                 return 1;
             }
         }
@@ -264,13 +280,16 @@ class ModuleManagementCommand extends Command
 
             if ($result) {
                 $this->info("Module '{$module}' installed successfully.");
+
                 return 0;
             } else {
                 $this->error("Failed to install module '{$module}'.");
+
                 return 1;
             }
         } catch (\Exception $e) {
-            $this->error("Error installing module '{$module}': " . $e->getMessage());
+            $this->error("Error installing module '{$module}': ".$e->getMessage());
+
             return 1;
         }
     }
@@ -280,13 +299,15 @@ class ModuleManagementCommand extends Command
      */
     private function uninstallModule(?string $module): int
     {
-        if (!$module) {
+        if (! $module) {
             $this->error('Module key is required for uninstall action.');
+
             return 1;
         }
 
-        if (!$this->confirm("Are you sure you want to uninstall module '{$module}'?")) {
+        if (! $this->confirm("Are you sure you want to uninstall module '{$module}'?")) {
             $this->info('Uninstall cancelled.');
+
             return 0;
         }
 
@@ -295,13 +316,16 @@ class ModuleManagementCommand extends Command
 
             if ($result) {
                 $this->info("Module '{$module}' uninstalled successfully.");
+
                 return 0;
             } else {
                 $this->error("Failed to uninstall module '{$module}'.");
+
                 return 1;
             }
         } catch (\Exception $e) {
-            $this->error("Error uninstalling module '{$module}': " . $e->getMessage());
+            $this->error("Error uninstalling module '{$module}': ".$e->getMessage());
+
             return 1;
         }
     }
