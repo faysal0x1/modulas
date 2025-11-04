@@ -1,6 +1,6 @@
 {
     "name": "faysal0x1/modulas",
-    "description": ":package_description",
+    "description": "A powerful Laravel package for managing modules with both config-file and database-driven modes",
     "keywords": [
         ":vendor_name",
         "laravel",
@@ -35,13 +35,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "faysal0x1\\Modulas\\": "src/",
+            "faysal0x1\\Modulas\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
+            "faysal0x1\\Modulas\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -63,10 +63,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "faysal0x1\\Modulas\\ModulesServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "ModuleManager": "faysal0x1\\Modulas\\Facades\\ModuleManager"
             }
         }
     },
