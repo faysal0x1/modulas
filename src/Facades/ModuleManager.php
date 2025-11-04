@@ -25,12 +25,12 @@ use Illuminate\Support\Facades\Facade;
  * @method static void clearAllCache()
  * @method static array getModuleDependencies(string $moduleKey)
  *
- * @see \faysal0x1\Modulas\ModuleManager
+ * @see \faysal0x1\modulas\ModuleManager
  */
 class ModuleManager extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \faysal0x1\Modulas\ModuleManager::class;
+        return \faysal0x1\modulas\ModuleManager::class;
     }
 }

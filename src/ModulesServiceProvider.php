@@ -33,7 +33,7 @@ class ModulesServiceProvider extends PackageServiceProvider
         if ($useDatabase) {
             // Initialize database mode
             try {
-                \faysal0x1\Modulas\Services\DatabaseModuleManager::initialize();
+                \faysal0x1\modulas\Services\DatabaseModuleManager::initialize();
             } catch (\Exception $e) {
                 // Database might not be available during installation
             }

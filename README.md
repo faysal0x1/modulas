@@ -21,7 +21,7 @@ A powerful Laravel package for managing modules with both config-file and databa
 
 ## Requirements
 
-- PHP ^8.4
+- PHP ^8.3
 - Laravel ^11.0 || ^12.0
 - Illuminate/Contracts ^11.0 || ^12.0
 

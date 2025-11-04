@@ -2,7 +2,6 @@
 
 namespace faysal0x1\modulas\Tests;
 
-use faysal0x1\Modulas\ModulesServiceProvider;
 use faysal0x1\modulas\ModulesServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -14,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'faysal0x1\\Modulas\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'faysal0x1\\modulas\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
