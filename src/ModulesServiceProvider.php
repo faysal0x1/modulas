@@ -22,6 +22,7 @@ class ModulesServiceProvider extends PackageServiceProvider
     {
         parent::register();
 
+        // Only set configuration, don't access database or cache during registration
         $rootEnabled = (bool) (config('modules.enabled', true));
         if (! $rootEnabled) {
             return;
@@ -29,35 +30,6 @@ class ModulesServiceProvider extends PackageServiceProvider
 
         $useDatabase = (bool) (config('modules.use_database', true));
         ModuleManager::useDatabase($useDatabase);
-
-        if ($useDatabase) {
-            // Initialize database mode
-            try {
-                \faysal0x1\modulas\Services\DatabaseModuleManager::initialize();
-            } catch (\Exception $e) {
-                // Database might not be available during installation
-            }
-        }
-
-        $modulesConfig = config('modules.modules', []);
-
-        foreach ($modulesConfig as $moduleKey => $module) {
-            if (! ($module['enabled'] ?? false)) {
-                continue;
-            }
-
-            $provider = $module['provider'] ?? null;
-            if (is_string($provider) && class_exists($provider)) {
-                $this->app->register($provider);
-            }
-        }
-
-        // Register modules based on mode
-        if ($useDatabase) {
-            ModuleManager::registerAll();
-        } else {
-            ModuleManager::registerAll();
-        }
     }
 
     public function boot(): void
@@ -69,8 +41,39 @@ class ModulesServiceProvider extends PackageServiceProvider
             return;
         }
 
+        $useDatabase = (bool) (config('modules.use_database', true));
+
+        // Initialize database mode only when fully booted
+        if ($useDatabase) {
+            try {
+                \faysal0x1\modulas\Services\DatabaseModuleManager::initialize();
+            } catch (\Exception $e) {
+                // Database might not be available during installation or testing
+            }
+        }
+
         $modulesConfig = config('modules.modules', []);
 
+        // Register module providers from config
+        foreach ($modulesConfig as $moduleKey => $module) {
+            if (! ($module['enabled'] ?? false)) {
+                continue;
+            }
+
+            $provider = $module['provider'] ?? null;
+            if (is_string($provider) && class_exists($provider)) {
+                $this->app->register($provider);
+            }
+        }
+
+        // Register modules based on mode (this will use database if enabled)
+        try {
+            ModuleManager::registerAll();
+        } catch (\Exception $e) {
+            // Silently fail if database isn't available yet
+        }
+
+        // Load convention-based resources
         foreach ($modulesConfig as $moduleKey => $module) {
             if (! ($module['enabled'] ?? false)) {
                 continue;
@@ -103,7 +106,11 @@ class ModulesServiceProvider extends PackageServiceProvider
         }
 
         // Boot all modules
-        ModuleManager::bootAll();
+        try {
+            ModuleManager::bootAll();
+        } catch (\Exception $e) {
+            // Silently fail if modules can't be booted
+        }
     }
 
     private static function studlyFromKey(string $key): string

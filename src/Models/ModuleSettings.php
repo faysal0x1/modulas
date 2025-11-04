@@ -4,6 +4,7 @@ namespace faysal0x1\modulas\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 
 class ModuleSettings extends Model
 {
@@ -161,9 +162,15 @@ class ModuleSettings extends Model
      */
     public function clearCache(): void
     {
-        Cache::forget($this->getCacheKey());
-        Cache::forget(self::getAllCacheKey());
-        Cache::forget("module_config_{$this->module_key}");
+        try {
+            if (app()->bound('cache')) {
+                Cache::forget($this->getCacheKey());
+                Cache::forget(self::getAllCacheKey());
+                Cache::forget("module_config_{$this->module_key}");
+            }
+        } catch (\Exception $e) {
+            // Cache service might not be available
+        }
     }
 
     /**
@@ -171,13 +178,23 @@ class ModuleSettings extends Model
      */
     public static function clearAllCache(): void
     {
-        Cache::forget(self::getAllCacheKey());
+        try {
+            if (app()->bound('cache')) {
+                Cache::forget(self::getAllCacheKey());
 
-        // Clear individual module caches
-        self::all()->each(function ($module) {
-            Cache::forget($module->getCacheKey());
-            Cache::forget("module_config_{$module->module_key}");
-        });
+                // Clear individual module caches
+                try {
+                    self::all()->each(function ($module) {
+                        Cache::forget($module->getCacheKey());
+                        Cache::forget("module_config_{$module->module_key}");
+                    });
+                } catch (\Exception $e) {
+                    // Database might not be available
+                }
+            }
+        } catch (\Exception $e) {
+            // Cache service might not be available
+        }
     }
 
     /**
@@ -185,28 +202,46 @@ class ModuleSettings extends Model
      */
     public static function syncFromConfig(): void
     {
-        $configModules = config('modules.modules', []);
+        try {
+            // Check if database connection is available
+            if (! app()->bound('db')) {
+                return;
+            }
 
-        foreach ($configModules as $key => $config) {
-            self::updateOrCreate(
-                ['module_key' => $key],
-                [
-                    'module_name' => ucwords(str_replace(['_', '-'], ' ', $key)),
-                    'description' => $config['description'] ?? null,
-                    'is_enabled' => $config['enabled'] ?? false,
-                    'auto_register' => $config['auto_register'] ?? true,
-                    'provider_class' => $config['provider'] ?? null,
-                    'settings' => $config['settings'] ?? [],
-                    'dependencies' => $config['dependencies'] ?? [],
-                    'version' => $config['version'] ?? '1.0.0',
-                    'author' => $config['author'] ?? null,
-                    'is_core' => $config['is_core'] ?? false,
-                    'sort_order' => $config['sort_order'] ?? 0,
-                ]
-            );
+            // Check if table exists
+            try {
+                if (! Schema::hasTable('module_settings')) {
+                    return;
+                }
+            } catch (\Exception $e) {
+                return;
+            }
+
+            $configModules = config('modules.modules', []);
+
+            foreach ($configModules as $key => $config) {
+                self::updateOrCreate(
+                    ['module_key' => $key],
+                    [
+                        'module_name' => ucwords(str_replace(['_', '-'], ' ', $key)),
+                        'description' => $config['description'] ?? null,
+                        'is_enabled' => $config['enabled'] ?? false,
+                        'auto_register' => $config['auto_register'] ?? true,
+                        'provider_class' => $config['provider'] ?? null,
+                        'settings' => $config['settings'] ?? [],
+                        'dependencies' => $config['dependencies'] ?? [],
+                        'version' => $config['version'] ?? '1.0.0',
+                        'author' => $config['author'] ?? null,
+                        'is_core' => $config['is_core'] ?? false,
+                        'sort_order' => $config['sort_order'] ?? 0,
+                    ]
+                );
+            }
+
+            self::clearAllCache();
+        } catch (\Exception $e) {
+            // Silently fail if database isn't available during package discovery
         }
-
-        self::clearAllCache();
     }
 
     /**
