@@ -1,12 +1,12 @@
 {
-    "name": ":vendor_slug/:package_slug",
+    "name": "faysal0x1/modulas",
     "description": ":package_description",
     "keywords": [
         ":vendor_name",
         "laravel",
         ":package_slug"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/faysal0x1/modulas",
     "license": "MIT",
     "authors": [
         {
