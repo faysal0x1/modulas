@@ -6,6 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * @property int $id
+ * @property string $module_key
+ * @property string $module_name
+ * @property string|null $description
+ * @property bool $is_enabled
+ * @property bool $auto_register
+ * @property string|null $provider_class
+ * @property array|null $settings
+ * @property array|null $dependencies
+ * @property string|null $version
+ * @property string|null $author
+ * @property string|null $changelog
+ * @property bool $is_core
+ * @property int $sort_order
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
 class ModuleSettings extends Model
 {
     protected $table = 'module_settings';
