@@ -11,6 +11,7 @@ use Throwable;
 class ModuleManager
 {
     private static array $loadedModules = [];
+
     private static bool $useDatabase = true;
 
     /**
@@ -29,6 +30,7 @@ class ModuleManager
         if (self::$useDatabase) {
             DatabaseModuleManager::registerAll();
             self::$loadedModules = DatabaseModuleManager::getLoadedModules();
+
             return;
         }
 
@@ -45,7 +47,7 @@ class ModuleManager
                     Log::warning("Provider not found or undefined for module: {$moduleName}");
                 }
             } catch (Throwable $e) {
-                Log::error("Failed to register module {$moduleName}: " . $e->getMessage());
+                Log::error("Failed to register module {$moduleName}: ".$e->getMessage());
             }
         }
     }
@@ -57,6 +59,7 @@ class ModuleManager
     {
         if (self::$useDatabase) {
             DatabaseModuleManager::bootAll();
+
             return;
         }
 
@@ -66,7 +69,7 @@ class ModuleManager
                     app($provider)->boot();
                 }
             } catch (Throwable $e) {
-                Log::error("Failed to boot module {$moduleName}: " . $e->getMessage());
+                Log::error("Failed to boot module {$moduleName}: ".$e->getMessage());
             }
         }
     }
@@ -165,6 +168,7 @@ class ModuleManager
         $parts = array_map(static function ($p) {
             return ucfirst(strtolower($p));
         }, $parts);
+
         return implode('', $parts);
     }
 
@@ -197,7 +201,7 @@ class ModuleManager
                 }
 
                 $classBase = substr($file, 0, -4); // remove .php
-                $fqcn = $seedersNamespace . '\\' . $classBase;
+                $fqcn = $seedersNamespace.'\\'.$classBase;
                 if (class_exists($fqcn)) {
                     $seeders[] = $fqcn;
                 }
@@ -260,7 +264,7 @@ class ModuleManager
             return DatabaseModuleManager::enableModule($moduleKey);
         }
 
-        throw new RuntimeException("Module enabling is only available with database mode");
+        throw new RuntimeException('Module enabling is only available with database mode');
     }
 
     /**
@@ -272,7 +276,7 @@ class ModuleManager
             return DatabaseModuleManager::disableModule($moduleKey);
         }
 
-        throw new RuntimeException("Module disabling is only available with database mode");
+        throw new RuntimeException('Module disabling is only available with database mode');
     }
 
     /**
@@ -284,7 +288,7 @@ class ModuleManager
             return DatabaseModuleManager::updateModuleSettings($moduleKey, $settings);
         }
 
-        throw new RuntimeException("Module settings update is only available with database mode");
+        throw new RuntimeException('Module settings update is only available with database mode');
     }
 
     /**
@@ -309,6 +313,7 @@ class ModuleManager
         }
 
         $config = config("modules.modules.{$moduleKey}");
+
         return $config ? ($config['enabled'] ?? false) : false;
     }
 
@@ -352,6 +357,7 @@ class ModuleManager
         }
 
         $config = config("modules.modules.{$moduleKey}");
+
         return $config ? ($config['dependencies'] ?? []) : [];
     }
 }

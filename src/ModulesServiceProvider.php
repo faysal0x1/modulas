@@ -78,25 +78,25 @@ class ModulesServiceProvider extends PackageServiceProvider
             }
 
             $studly = self::studlyFromKey($moduleKey);
-            $basePath = app_path('Modules/' . $studly);
+            $basePath = app_path('Modules/'.$studly);
 
             // Convention-based resource loading for modules without a custom provider
             $hasCustomProvider = is_string($module['provider'] ?? null) && class_exists($module['provider']);
 
             // Load migrations for all enabled modules (safe to call even if provider also loads them)
-            $migrationsPath = $basePath . '/Database/Migrations';
+            $migrationsPath = $basePath.'/Database/Migrations';
             if (is_dir($migrationsPath)) {
                 $this->loadMigrationsFrom($migrationsPath);
             }
 
             // Load routes if no custom provider is present
             if (! $hasCustomProvider) {
-                $webRoutes = $basePath . '/Routes/web.php';
+                $webRoutes = $basePath.'/Routes/web.php';
                 if (file_exists($webRoutes)) {
                     Route::middleware('web')->group($webRoutes);
                 }
 
-                $apiRoutes = $basePath . '/Routes/api.php';
+                $apiRoutes = $basePath.'/Routes/api.php';
                 if (file_exists($apiRoutes)) {
                     Route::middleware('api')->prefix('api')->group($apiRoutes);
                 }
@@ -113,6 +113,7 @@ class ModulesServiceProvider extends PackageServiceProvider
         $parts = array_map(static function ($p) {
             return ucfirst(strtolower($p));
         }, $parts);
+
         return implode('', $parts);
     }
 }
